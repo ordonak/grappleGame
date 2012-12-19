@@ -5,8 +5,8 @@ public class Control : MonoBehaviour {
 
 	
 	
-	public float speed = 5F;
-	public float jumpVel = 5;
+	public float speed = 20F;
+	public float jumpVel = 20;
 	public Vector3 velocity = new Vector3(0,0,0);
 	public bool onPlat = true;
 	public GameObject particle;
@@ -17,6 +17,7 @@ public class Control : MonoBehaviour {
 	public bool fallWait;
 	public bool hookedOn;
 	public Vector3 newPos, negForce;
+	public CharacterController CharController;
 	// Use this for initialization
 	void Start () {
 	
@@ -24,22 +25,17 @@ public class Control : MonoBehaviour {
 	
 	void Update () {
 		
-		if(fallWait)
-			timeLeft -= Time.deltaTime;
-		if(timeLeft <= 0){
-			fallWait = false;
-			timeLeft = 1;
-			rigidbody.useGravity = true;
-		}
+	CharController.SimpleMove(new Vector3(0,20,0));
 		
-		float translation = Input.GetAxis("Horizontal") * speed;
-		translation *= Time.deltaTime;
-		velocity = new Vector3(translation, 0, 0);	
-		rigidbody.AddForce(velocity, ForceMode.VelocityChange);
+		//float translation = Input.GetAxis("Horizontal") * speed;
+		//translation *= Time.deltaTime;
+		//velocity = new Vector3(translation, 0, 0);	
+		//rigidbody.AddForce(velocity, ForceMode.VelocityChange);
 		//check for jumps
 		if(Input.GetButtonDown ("Vertical") && onPlat){
-			velocity = new Vector3(0,jumpVel,0);
-			rigidbody.AddForce (velocity,ForceMode.VelocityChange );
+			velocity = new Vector3(0,20,0);
+			//rigidbody.AddForce (velocity,ForceMode.VelocityChange );
+			CharController.SimpleMove(velocity);
 		}
 		if(Input.GetButton ("Vertical") && onLadder){
 			isClimbing = true;
@@ -54,7 +50,7 @@ public class Control : MonoBehaviour {
 					newPos =  hit.point- this.transform.position;
 					negForce = this.transform.position -hit.point;
 					newPos.z = this.transform.position.z;
-					rigidbody.AddForce (newPos, ForceMode.VelocityChange);
+//					rigidbody.AddForce (newPos, ForceMode.VelocityChange);
 				
 				
 
@@ -85,7 +81,7 @@ public class Control : MonoBehaviour {
 		if(!onLadder){
 			fallWait = true;
 			inAir = true;
-		rigidbody.useGravity = false;
+		//rigidbody.useGravity = true;
 		}
 		
 	}

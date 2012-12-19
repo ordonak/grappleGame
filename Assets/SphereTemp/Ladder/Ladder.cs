@@ -16,7 +16,7 @@ public class Ladder : MonoBehaviour {
 	void OnTriggerEnter(Collider other)
 	{
 		
-		this.transform.parent = other.gameObject.GetComponent<CharMoter>();
+		//this.transform.parent = other.gameObject.GetComponent<CharMoter>();
 		
 			//other.gameObject.GetComponent<Control>().onLadder = true;
 			//other.gameObject.GetComponent<Control>().onPlat = false;

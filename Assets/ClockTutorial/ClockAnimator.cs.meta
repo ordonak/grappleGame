@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: af0c4d5cd707d7949ad879a94fa32e9b
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - hours: {fileID: 400002, guid: d75c0def449f8154e8194f6da48e625c, type: 2}
+  - minutes: {fileID: 400002, guid: 00089e9e9ea60694dbff26b45ab29e3b, type: 2}
+  - seconds: {fileID: 400002, guid: fa0b0b05d5f2d9c42bf467919af35ff8, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 

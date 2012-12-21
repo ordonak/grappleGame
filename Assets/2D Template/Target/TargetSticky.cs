@@ -2,7 +2,8 @@ using UnityEngine;
 using System.Collections;
 
 public class TargetSticky : MonoBehaviour {
-
+	
+	public bool hookedOn;
 	// Use this for initialization
 	void Start () {
 	
@@ -14,9 +15,9 @@ public class TargetSticky : MonoBehaviour {
 	}
 	
 	void OnCollisionEnter(Collision c) {
-        if(c.gameObject.name == "Character"){
-			var joint = gameObject.AddComponent<HingeJoint>();
-        	joint.connectedBody = c.rigidbody;
-		}
+        c.gameObject.GetComponent<CharMoter>().gravity = 10;
+		c.gameObject.GetComponent<CharMoter>().hooking = false;
+		hookedOn = true;
     }
+	
 }

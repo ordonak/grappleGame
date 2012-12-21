@@ -50,15 +50,8 @@ public class Control : MonoBehaviour {
 					newPos =  hit.point- this.transform.position;
 					negForce = this.transform.position -hit.point;
 					newPos.z = this.transform.position.z;
-//					rigidbody.AddForce (newPos, ForceMode.VelocityChange);
+					rigidbody.AddForce (newPos, ForceMode.VelocityChange);
 				
-				
-
-					//while(this.transform.position!= newPos)
-    				//this.transform.position = Vector3.Lerp(this.transform.position, newPos, Time.deltaTime * smooth);
-					//this.transform.position = Vector3.MoveTowards(this.transform.position, newPos, 1);
-				
-					//this.transform.position = newPos;
 					}
 			
 			

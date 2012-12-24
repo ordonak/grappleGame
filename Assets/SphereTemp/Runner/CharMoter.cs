@@ -5,11 +5,11 @@ public class CharMoter : MonoBehaviour {
     public float speed = 6.0F;
     public float jumpSpeed = 12.0F;
     public float gravity = 10.0F;
-	bool onPlat;
+	public bool onPlat;
 	public bool hooking;
 	public bool hooked;
 	public bool onLadder;
-
+	
     private Vector3 moveDirection = Vector3.zero;
     void Update() {
         
@@ -21,20 +21,35 @@ public class CharMoter : MonoBehaviour {
             if (Input.GetButton("Jump"))
                 moveDirection.y = jumpSpeed;
         }
+		
         moveDirection.y -= gravity * Time.deltaTime;
         controller.Move(moveDirection * Time.deltaTime);
+		
+		if(onLadder && Input.GetButton ("Vertical"))
+		{
+			gravity = 0;
+			if(Input.GetAxis ("Vertical") > 0)
+				this.transform.Translate((Vector3.up * Time.deltaTime)*2, Space.World);
+			else
+				this.transform.Translate((Vector3.down * Time.deltaTime)*2, Space.World);
+		}
+		
+		
 		
 		checkClick ();
 		checkHook();
 		
 	}
 	
+	public Vector3 returnMove()
+	{
+		return moveDirection;	
+	}
+	
 	void checkHook()
 	{
 		if(hooking)
 			gravity = 0;
-		else if(hooked)
-			gravity = 10;
 	}
 	
 	void checkClick()
@@ -56,9 +71,11 @@ public class CharMoter : MonoBehaviour {
 	
 	void OnCollisionEnter(Collider c)
 	{
+		gravity = 10;
 		if(c.gameObject.name == "Target"){
 			hooking = false;
 			hooked = true;
+			
 			var joint = gameObject.AddComponent<HingeJoint>();
         	joint.connectedBody = c.rigidbody;
 			joint.breakForce = 3;

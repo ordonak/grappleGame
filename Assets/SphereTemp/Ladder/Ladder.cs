@@ -10,25 +10,17 @@ public class Ladder : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		
 	}
 	
 	void OnTriggerEnter(Collider other)
 	{
-		
-		//this.transform.parent = other.gameObject.GetComponent<CharMoter>();
-		
-			//other.gameObject.GetComponent<Control>().onLadder = true;
-			//other.gameObject.GetComponent<Control>().onPlat = false;
-			//other.gameObject.GetComponent<Control>().rigidbody.useGravity = false;
-		
+		other.gameObject.GetComponent<CharMoter>().onLadder=true;
 	}
 	
 	void OnTriggerExit(Collider other)
 	{
-			//other.gameObject.GetComponent<Control>().onLadder = false;
-			//other.gameObject.GetComponent<Control>().rigidbody.useGravity = true;
-			//other.gameObject.GetComponent<Control>().isClimbing = false;
-		
+			other.gameObject.GetComponent<CharMoter>().onLadder = false;
+			other.gameObject.GetComponent<CharMoter>().gravity = 10;
 	}
 }

@@ -25,17 +25,8 @@ public class CharMoter : MonoBehaviour {
         moveDirection.y -= gravity * Time.deltaTime;
         controller.Move(moveDirection * Time.deltaTime);
 		
-		if(onLadder && Input.GetButton ("Vertical"))
-		{
-			gravity = 0;
-			if(Input.GetAxis ("Vertical") > 0)
-				this.transform.Translate((Vector3.up * Time.deltaTime)*2, Space.World);
-			else
-				this.transform.Translate((Vector3.down * Time.deltaTime)*2, Space.World);
-		}
 		
-		
-		
+		checkLadder ();
 		checkClick ();
 		checkHook();
 		
@@ -44,6 +35,18 @@ public class CharMoter : MonoBehaviour {
 	public Vector3 returnMove()
 	{
 		return moveDirection;	
+	}
+	
+	void checkLadder()
+	{
+		if(onLadder && Input.GetButton ("Vertical"))
+		{
+			gravity = 0;
+			if(Input.GetAxis ("Vertical") > 0)
+				this.transform.Translate((Vector3.up * Time.deltaTime)*2, Space.World);
+			else
+				this.transform.Translate((Vector3.down * Time.deltaTime)*2, Space.World);
+		}
 	}
 	
 	void checkHook()

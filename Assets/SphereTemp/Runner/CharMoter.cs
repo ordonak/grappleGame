@@ -9,26 +9,42 @@ public class CharMoter : MonoBehaviour {
 	public bool hooking;
 	public bool hooked;
 	public bool onLadder;
-	
+	public bool falling = true;
     private Vector3 moveDirection = Vector3.zero;
     void Update() {
         
+		  
 		CharacterController controller = GetComponent<CharacterController>();
-        if (controller.isGrounded) {
+        if (controller.isGrounded && !hooked) {
+			
             moveDirection = new Vector3(Input.GetAxis("Horizontal"),  Input.GetAxis("Vertical"),0);
             moveDirection = transform.TransformDirection(moveDirection);
             moveDirection *= speed;
-            if (Input.GetButton("Jump"))
+            if (Input.GetButton("Jump")){
                 moveDirection.y = jumpSpeed;
-        }
-		
+				
+			}
+        }else if(hooking)
+		{
+			
+		}
+		else if(hooked){
+			
+			
+				
+				moveDirection = new Vector3(0,0,0);
+			
+		}
+		else{
         moveDirection.y -= gravity * Time.deltaTime;
-        controller.Move(moveDirection * Time.deltaTime);
+       
+		}
 		
 		
 		checkLadder ();
 		checkClick ();
 		checkHook();
+		 controller.Move(moveDirection * Time.deltaTime);
 		
 	}
 	
@@ -51,8 +67,8 @@ public class CharMoter : MonoBehaviour {
 	
 	void checkHook()
 	{
-		if(hooking)
-			gravity = 0;
+		//if(hooking)
+		//	gravity = 0;
 	}
 	
 	void checkClick()
@@ -72,22 +88,48 @@ public class CharMoter : MonoBehaviour {
 	}
 	
 	
-	void OnCollisionEnter(Collider c)
+	void OnCollisionEnter(Collision c)
 	{
-		gravity = 10;
+			hooking = false;
 		if(c.gameObject.name == "Target"){
 			hooking = false;
 			hooked = true;
 			
-			var joint = gameObject.AddComponent<HingeJoint>();
-        	joint.connectedBody = c.rigidbody;
-			joint.breakForce = 3;
+			//var joint = gameObject.AddComponent<HingeJoint>();
+        	//joint.connectedBody = c.rigidbody;
+			//joint.breakForce = 5;
+			moveDirection =  new Vector3(0,0,0);
 		}
+		
+	
 	}
+	
+	void OnControllerColliderHit(ControllerColliderHit hit) {
+       GameObject body = hit.gameObject;
+        if (body.name== "Target"){
+
+
+			hooking = false;
+			hooked = true;
+			
+			//var joint = gameObject.AddComponent<HingeJoint>();
+        	//joint.connectedBody = c.rigidbody;
+			//joint.breakForce = 5;
+			moveDirection =  new Vector3(0,0,0);
+		
+		
+		}
+           
+        
+       
+      //  body.velocity = pushDir * pushPower;
+    }
 			
 	void onCollisionExit()
 	{
+		
 	}
+	
 }
 		
 	

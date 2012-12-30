@@ -10,6 +10,7 @@ public class CharMoter : MonoBehaviour {
 	public bool hooked;
 	public bool onLadder;
 	public bool falling = true;
+	private string connectedTo;
     private Vector3 moveDirection = Vector3.zero;
     void Update() {
         
@@ -77,9 +78,10 @@ public class CharMoter : MonoBehaviour {
 			RaycastHit hit;
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			
-			if(Physics.Raycast(ray, out hit) && hit.collider.name == "Target"){
+			if(Physics.Raycast(ray, out hit) && hit.collider.tag == "Target" && connectedTo != hit.collider.name){
 				hooking = true;
 				print ("Hit!");
+				connectedTo = hit.collider.name;
 				moveDirection =  hit.point- this.transform.position;
 				moveDirection.z = this.transform.position.z;
 				this.transform.Translate(moveDirection*Time.deltaTime);
@@ -91,7 +93,7 @@ public class CharMoter : MonoBehaviour {
 	void OnCollisionEnter(Collision c)
 	{
 			hooking = false;
-		if(c.gameObject.name == "Target"){
+			if(c.gameObject.tag == "Target"){
 			hooking = false;
 			hooked = true;
 			
@@ -106,7 +108,8 @@ public class CharMoter : MonoBehaviour {
 	
 	void OnControllerColliderHit(ControllerColliderHit hit) {
        GameObject body = hit.gameObject;
-        if (body.name== "Target"){
+		
+        if (body.tag== "Target"){
 
 
 			hooking = false;

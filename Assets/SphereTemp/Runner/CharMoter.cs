@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class CharMoter : MonoBehaviour {
     public float speed = 6.0F;
@@ -10,7 +11,9 @@ public class CharMoter : MonoBehaviour {
 	private string connectedTo;
     private Vector3 moveDirection = Vector3.zero;
 	private string lastStuck;
-
+	private string hookTarget;
+	private LinkedList<GameObject> passedThrough = new LinkedList<GameObject>();
+	
 	void CheckStuckInput ()
 	{
 		 if (Input.GetButton("Jump"))
@@ -40,6 +43,7 @@ public class CharMoter : MonoBehaviour {
 			moveDirection.y -= gravity * Time.deltaTime;
 			break;
 		case STATE.HOOKING:
+			hookRoutine();
 			break;
 		case STATE.ON_LADDER:
 			break;
@@ -48,7 +52,6 @@ public class CharMoter : MonoBehaviour {
 			CheckStuckInput();
 			break;
 		}
-		lastStuck = "";
 		
 		
 		
@@ -79,6 +82,7 @@ public class CharMoter : MonoBehaviour {
 		void CheckGroundInput ()
 	{
 		
+		lastStuck = "";
 		moveDirection = new Vector3(Input.GetAxis("Horizontal"),  0,0);
             moveDirection += transform.TransformDirection(moveDirection);
             moveDirection *= speed;
@@ -94,37 +98,45 @@ public class CharMoter : MonoBehaviour {
 	
 	void checkHookInput()
 	{
-		if(Input.GetButton ("Fire1")){
-			RaycastHit hit;
-			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		if(Input.GetButton ("Fire1"))
+			state = STATE.HOOKING;
 			
-			if(Physics.Raycast(ray, out hit) && hit.collider.tag == "Target" ){
+	}
+	
+	void hookRoutine()
+	{
+		RaycastHit hit;
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			
+			if(Physics.Raycast(ray, out hit) && hit.collider.tag == "Target" &&lastStuck != hit.collider.name){
 				state = STATE.HOOKING;
 				print ("Hit!");
-				
+				hookTarget = hit.collider.name;
 				moveDirection =  hit.point- this.transform.position;
 				moveDirection.z = this.transform.position.z;
 				this.transform.Translate(moveDirection*Time.deltaTime);
 				}
-    	}
+    	
 	}
-	
-
 	
 	void OnControllerColliderHit(ControllerColliderHit hit) {
        GameObject body = hit.gameObject;
-		
-					
 		switch (body.tag){
 			case "Target":
-
-				//hooked = true;
-				
-			if(lastStuck!=body.name)
+			if(state == STATE.HOOKING && body.name ==hookTarget){
 				state = STATE.STUCK;
-			lastStuck = body.name;
+				lastStuck = body.name;
+				hookTarget = "";
+				foreach(GameObject item in passedThrough)
+					item.collider.enabled = true;
 				
-				break;
+				passedThrough.Clear ();
+			}
+			else{
+				passedThrough.AddFirst(body);
+				body.collider.enabled=false;
+			}
+			break;
 			case "Platform":
 				state = STATE.GROUNDED;
 				break;

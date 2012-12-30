@@ -15,12 +15,11 @@ public class Ladder : MonoBehaviour {
 	
 	void OnTriggerEnter(Collider other)
 	{
-		other.gameObject.GetComponent<CharMoter>().onLadder=true;
+	
 	}
 	
 	void OnTriggerExit(Collider other)
 	{
-			other.gameObject.GetComponent<CharMoter>().onLadder = false;
-			other.gameObject.GetComponent<CharMoter>().gravity = 10;
+		
 	}
 }

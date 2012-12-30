@@ -15,10 +15,8 @@ public class TargetSticky : MonoBehaviour {
 	}
 	
 	void OnCollisionEnter(Collision c) {
-        c.gameObject.GetComponent<CharMoter>().gravity = 10;
-		c.gameObject.GetComponent<CharMoter>().hooking = false;
-		c.gameObject.GetComponent<CharMoter>().hooked = true;
-		hookedOn = true;
+  
+	
     }
 	
 	
